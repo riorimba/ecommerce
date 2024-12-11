@@ -16,15 +16,21 @@ class ProductImagesTableSeeder extends Seeder
         DB::table('product_images')->insert([
             [
                 'product_id' => 1,
-                'image' => 'product1.jpg',
+                'image_path' => 'product1.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 2,
-                'image' => 'product2.jpg',
+                'image_path' => 'product2.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'product_id' => 3,
-                'image' => 'product3.jpg',
+                'image_path' => 'product3.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

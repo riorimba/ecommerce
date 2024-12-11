@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
+            $table->integer('total');
             $table->timestamps();
         });
     }

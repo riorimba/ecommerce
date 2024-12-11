@@ -33,7 +33,7 @@
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="" >Update Profile</a>
+                                <li><a class="dropdown-item" href="" >Update</a>
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">Logout</a>
@@ -55,6 +55,13 @@
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
+                        @if (Auth::user()->role_id == 2)
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href=" {{ route('dashboard') }} ">
+                                Dashboard
+                            </a>
+                        </li>
+                        @else (Auth::user()->role_id == 1)
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href=" {{ route('dashboard') }} ">
                                 Dashboard
@@ -80,6 +87,7 @@
                                 User Management
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </div>
             </nav>

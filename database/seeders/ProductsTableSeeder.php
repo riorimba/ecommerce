@@ -20,6 +20,8 @@ class ProductsTableSeeder extends Seeder
                 'description' => 'Description 1',
                 'price' => 100,
                 'stock' => 10,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'category_id' => 2,
@@ -27,6 +29,8 @@ class ProductsTableSeeder extends Seeder
                 'description' => 'Description 2',
                 'price' => 200,
                 'stock' => 20,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'category_id' => 3,
@@ -34,6 +38,8 @@ class ProductsTableSeeder extends Seeder
                 'description' => 'Description 3',
                 'price' => 300,
                 'stock' => 30,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

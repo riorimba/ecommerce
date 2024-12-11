@@ -17,14 +17,20 @@ class CategoriesTableSeeder extends Seeder
             [
                 'name' => 'Electronics',
                 'description' => 'ini barang elektronik',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Clothing',
                 'description' => 'ini barang pakaian',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Books',
                 'description' => 'ini barang buku',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

@@ -30,9 +30,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard', [AuthenticationController::class, 'dashboard'])->name('dashboard');
     Route::post('logout', [AuthenticationController::class, 'logout'])->name('logout');
 
-
-    Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
+    Route::group(['middleware' => ['role:1']], function () {
+        Route::resource('categories', CategoryController::class);
+        Route::resource('products', ProductController::class);
+        Route::resource('users', UserController::class);
+    });
+    
     Route::resource('orders', OrderController::class);
-    Route::resource('users', UserController::class);
 });

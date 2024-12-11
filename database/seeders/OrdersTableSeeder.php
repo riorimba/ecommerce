@@ -17,14 +17,23 @@ class OrdersTableSeeder extends Seeder
             [
                 'user_id' => 1,
                 'status' => 'paid',
+                'total' => 200,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'user_id' => 2,
                 'status' => 'shipped',
+                'total' => 1100,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'status' => 'completed',
+                'total' => 600,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
