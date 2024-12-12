@@ -4,7 +4,6 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
         <h1>Orders</h1>
-        <a href="{{ route('orders.create') }}" class="btn btn-primary">Add Order</a>
     </div>
     @if(session('success'))
         <div class="alert alert-success mt-2">{{ session('success') }}</div>

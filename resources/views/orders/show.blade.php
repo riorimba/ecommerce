@@ -9,7 +9,7 @@
         </div>
         <div class="card-body">
             <p><strong>User:</strong> {{ $order->user->name }}</p>
-            <p><strong>Total Amount:</strong> {{ $order->total_amount }}</p>
+            <p><strong>Total:</strong> {{ $order->total }}</p>
             <p><strong>Status:</strong> {{ $order->status }}</p>
             <p><strong>Created At:</strong> {{ $order->created_at }}</p>
             <p><strong>Updated At:</strong> {{ $order->updated_at }}</p>
