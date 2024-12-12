@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +23,17 @@ Route::post('login', [UserController::class, 'login']);
 Route::get('me', [UserController::class, 'me'])->middleware('auth:sanctum');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::get('products', [ProductController::class, 'index']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('products', [ProductController::class, 'index']);
+
+    Route::post('cart/add', [CartController::class, 'addProduct']);
+    Route::delete('cart/delete/{productId}', [CartController::class, 'deleteProduct']);
+    Route::get('cart/count', [CartController::class, 'countProducts']);
+    Route::post('cart/checkout', [CartController::class, 'checkout']);
+
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::get('orders/{orderId}', [OrderController::class, 'show']);
+});
+
+
