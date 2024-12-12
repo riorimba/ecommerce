@@ -18,7 +18,7 @@
                             <label for="category_id" class="form-label">Category</label>
                             <select class="form-control" id="category_id" name="category_id" required>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -34,9 +34,11 @@
                             <label for="images" class="form-label">Product Images</label>
                             <input type="file" class="form-control" id="images" name="images[]" multiple>
                             @if($product->images->isNotEmpty())
-                                <div class="mt-2">
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" width="100">
-                                </div>
+                            <div class="mt-2">
+                                @foreach($product->images as $image)
+                                <img src="{{ asset($image->image_path) }}" alt="Product Image" width="100" style="margin-right: 10px;">
+                                @endforeach
+                            </div>
                             @endif
                         </div>
                         <button type="submit" class="btn btn-primary">Update Product</button>

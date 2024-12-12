@@ -6,6 +6,9 @@
         <h1>Categories</h1>
         <a href="{{ route('categories.create') }}" class="btn btn-primary">Create Category</a>
     </div>
+    @if(session('success'))
+        <div class="alert alert-success mt-2">{{ session('success') }}</div>
+    @endif
     <table class="table table-striped">
         <thead>
             <tr>

@@ -6,6 +6,9 @@
         <h1>Users</h1>
         <a href="{{ route('users.create') }}" class="btn btn-primary">Add User</a>
     </div>
+    @if(session('success'))
+        <div class="alert alert-success mt-2">{{ session('success') }}</div>
+    @endif
     <table class="table mt-2">
         <thead>
             <tr>
@@ -24,7 +27,7 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->role->role_name }}</td>
                     <td>
-                    <a href="{{ route('users.show', $user->id) }}" class="btn btn-success btn-sm">Show</a>
+                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-success btn-sm">Show</a>
                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
                             @csrf

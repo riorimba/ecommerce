@@ -18,31 +18,36 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
+            'price' => 'required|integer',
             'stock' => 'required|integer',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         $product = Product::create($request->all());
         
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $filename = time() . '.' . $image->getClientOriginalExtension();
-                $path = $image->storeAs('product_images', $filename, 'public');
+                $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('product_images'), $fileName);
+    
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image_path' => $path,
+                    'image_path' => 'product_images/' . $fileName,
                 ]);
             }
         }
 
         return redirect()->route('products.index')->with('success', 'Product created successfully!');
+    }
+
+    public function show($id){
+        $product = Product::with('images')->findOrFail($id);
+        return view('products.show', compact('product'));
     }
 
     public function edit($id){
@@ -51,26 +56,26 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, Product $product){
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
+            'price' => 'required|integer',
             'stock' => 'required|integer',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
-        $product = Product::findOrFail($id);
         $product->update($request->all());
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('product_images', 'public');
+                $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('product_images'), $fileName);
+    
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image_path' => $path,
+                    'image_path' => 'product_images/' . $fileName,
                 ]);
             }
         }
@@ -78,9 +83,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
-    public function destroy($id)
-    {
-        $product = Product::findOrFail($id);
+    public function destroy(Product $product){
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully!');

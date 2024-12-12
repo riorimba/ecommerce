@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         $users = User::with('role')->get();
         return view('users.index', compact('users'));
     }
@@ -18,8 +17,7 @@ class UserController extends Controller
         return view('users.create', compact('roles'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
@@ -42,8 +40,7 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
-    public function edit(User $user)
-    {
+    public function edit(User $user){
         $roles = Role::all();
         return view('users.edit', compact('user', 'roles'));
     }
@@ -67,8 +64,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(User $user)
-    {
+    public function destroy(User $user){
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
