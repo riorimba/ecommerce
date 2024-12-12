@@ -83,6 +83,10 @@ class CartController extends Controller
                 'price' => $cartItem->product->price,
                 'subtotal' => $cartItem->quantity * $cartItem->product->price,
             ]);
+
+            $product = $cartItem->product;
+            $product->stock -= $cartItem->quantity;
+            $product->save();
         }
 
         Cart::where('user_id', $user->id)->delete();
