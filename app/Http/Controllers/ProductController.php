@@ -18,23 +18,24 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'category_id' => 'required',
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|integer',
             'stock' => 'required|integer',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $product = Product::create($request->all());
-        
+        $product = Product::create($validatedData);
+
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('product_images'), $fileName);
-    
+
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => 'product_images/' . $fileName,
@@ -42,7 +43,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function show($id){
@@ -57,22 +58,22 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product){
-        $request->validate([
-            'category_id' => 'required',
+        $validatedData = $request->validate([
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|integer',
             'stock' => 'required|integer',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $product->update($request->all());
+        $product->update($validatedData);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('product_images'), $fileName);
-    
+
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => 'product_images/' . $fileName,

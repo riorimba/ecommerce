@@ -19,19 +19,16 @@ class UserController extends Controller
     }
 
     public function store(Request $request){
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'role_id' => 'required',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role_id' => $request->role_id,
-        ]);
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        User::create($validatedData);
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -46,27 +43,26 @@ class UserController extends Controller
         return view('users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $user)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6',
-            'role_id' => 'required',
+    public function update(Request $request, User $user){
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6|confirmed',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password ? bcrypt($request->password) : $user->password,
-            'role_id' => $request->role_id,
-        ]);
+        if (!empty($validatedData['password'])) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        } else {
+            unset($validatedData['password']);
+        }
+
+        $user->update($validatedData);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(Request $request, User $user)
-    {
+    public function destroy(Request $request, User $user){
         if ($user->role_id == 1) {
             $request->validate([
                 'password' => 'required',

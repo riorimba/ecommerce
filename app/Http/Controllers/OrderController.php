@@ -22,13 +22,12 @@ class OrderController extends Controller
     }
 
     public function update(Request $request, Order $order){
-        $request->validate([
+        $validatedData = $request->validate([
             'status' => 'required|string',
         ]);
-    
-        $order->status = $request->input('status');
-        $order->save();
-    
+
+        $order->update($validatedData);
+
         return redirect()->route('orders.index')->with('success', 'Order status updated successfully.');
     }
 
