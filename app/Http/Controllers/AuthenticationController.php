@@ -23,7 +23,7 @@ class AuthenticationController extends Controller
 
         User::create($validatedData);
 
-        return redirect('auth.login')->with('success', 'User created successfully');
+        return redirect('login')->with('success', 'User created successfully');
     }
 
     public function login(){

@@ -15,7 +15,6 @@
                 <th>ID</th>
                 <th>Category</th>
                 <th>Name</th>
-                <!-- <th>Description</th> -->
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Images</th>
@@ -26,9 +25,8 @@
             @foreach ($products as $product)
                 <tr>
                     <td>{{ $product->id }}</td>
-                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->category ? $product->category->name : 'No Category' }}</td>
                     <td>{{ $product->name }}</td>
-                    <!-- <td>{{ $product->description }}</td> -->
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->stock }}</td>
                     <td>
