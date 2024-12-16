@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -64,7 +65,18 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(User $user){
+    public function destroy(Request $request, User $user)
+    {
+        if ($user->role_id == 1) {
+            $request->validate([
+                'password' => 'required',
+            ]);
+
+            if (!Hash::check($request->password, auth()->user()->password)) {
+                return redirect()->back()->withErrors(['password' => 'password confirmation failed, the user was not deleted']);
+            }
+        }
+
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
