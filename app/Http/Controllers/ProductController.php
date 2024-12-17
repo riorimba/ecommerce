@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -46,13 +47,11 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
-    public function show($id){
-        $product = Product::with('images')->findOrFail($id);
+    public function show(Product $product){
         return view('products.show', compact('product'));
     }
 
-    public function edit($id){
-        $product = Product::with('images')->findOrFail($id);
+    public function edit(Product $product){
         $categories = Category::all();
         return view('products.edit', compact('product', 'categories'));
     }
@@ -85,8 +84,20 @@ class ProductController extends Controller
     }
 
     public function destroy(Product $product){
+        foreach ($product->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+        }
+
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
+        return redirect()->route('products.index')->with('success', 'Product and its images deleted successfully!');
+    }
+
+    public function deleteImage(ProductImage $image){
+        Storage::disk('public')->delete($image->image_path);
+        $image->delete();
+
+        return redirect()->back()->with('success', 'Image deleted successfully.');
     }
 }
