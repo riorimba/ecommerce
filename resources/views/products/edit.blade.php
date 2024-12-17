@@ -5,7 +5,16 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             @if(session('success'))
-                <div class="alert alert-success mt-2">{{ session('success') }}</div>
+            <div class="alert alert-success mt-2">{{ session('success') }}</div>
+            @endif
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
             <div class="card mt-4">
                 <div class="card-header">Edit Product</div>
