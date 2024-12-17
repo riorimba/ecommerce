@@ -4,6 +4,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if(session('success'))
+                <div class="alert alert-success mt-2">{{ session('success') }}</div>
+            @endif
             <div class="card mt-4">
                 <div class="card-header">Edit Product</div>
                 <div class="card-body">
