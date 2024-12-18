@@ -7,9 +7,9 @@
         <a href="{{ route('categories.create') }}" class="btn btn-primary">Create Category</a>
     </div>
     @if(session('success'))
-        <div class="alert alert-success mt-2">{{ session('success') }}</div>
+    <div class="alert alert-success mt-2">{{ session('success') }}</div>
     @endif
-    <table class="table table-striped">
+    <table id="categories-table" class="table table-striped dt-responsive nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -19,21 +19,28 @@
         </thead>
         <tbody>
             @foreach($categories as $category)
-                <tr>
-                    <td>{{ $category->id }}</td>
-                    <td>{{ $category->name }}</td>
-                    <td>
-                        <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info btn-sm">Show</a>
-                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ $category->id }}</td>
+                <td>{{ $category->name }}</td>
+                <td>
+                    <a href="{{ route('categories.show', $category->id) }}" class="btn btn-info btn-sm">Show</a>
+                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#categories-table').DataTable();
+    });
+</script>
 @endsection

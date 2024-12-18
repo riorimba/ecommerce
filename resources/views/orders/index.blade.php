@@ -8,7 +8,7 @@
     @if(session('success'))
         <div class="alert alert-success mt-2">{{ session('success') }}</div>
     @endif
-    <table class="table mt-2">
+    <table id="orders-table" class="table mt-2">
         <thead>
             <tr>
                 <th>ID</th>
@@ -39,4 +39,10 @@
         </tbody>
     </table>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#orders-table').DataTable();
+    });
+</script>
 @endsection
