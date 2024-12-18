@@ -25,7 +25,7 @@
                     </table>
 
                     <h3>Products in this Category</h3>
-                    <table class="table table-bordered">
+                    <table id="categories-show-table" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -52,4 +52,10 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#categories-show-table').DataTable();
+    });
+</script>
 @endsection

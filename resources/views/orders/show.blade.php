@@ -17,7 +17,7 @@
     </div>
 
     <h2 class="mt-4">Order Items</h2>
-    <table class="table mt-2">
+    <table id="order-show-table" class="table mt-2">
         <thead>
             <tr>
                 <th>Product</th>
@@ -36,4 +36,10 @@
         </tbody>
     </table>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#order-show-table').DataTable();
+    });
+</script>
 @endsection
