@@ -17,6 +17,8 @@ class OrderItem extends Model
         'quantity',
         'price',
         'subtotal',
+        'product_name',
+        'product_price',
     ];
 
     public function order(){
@@ -24,6 +26,6 @@ class OrderItem extends Model
     }
 
     public function product(){
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->withTrashed();
     }
 }

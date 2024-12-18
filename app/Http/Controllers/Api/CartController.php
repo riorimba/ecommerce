@@ -60,6 +60,7 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cartItems = Cart::where('user_id', $user->id)->get();
+        // $cartItems = $user->carts;
 
         if ($cartItems->isEmpty()) {
             return response()->json(['message' => 'Cart is empty'], 400);
@@ -76,12 +77,15 @@ class CartController extends Controller
         ]);
 
         foreach ($cartItems as $cartItem) {
+            $product = $cartItem->product;
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $cartItem->product_id,
                 'quantity' => $cartItem->quantity,
                 'price' => $cartItem->product->price,
                 'subtotal' => $cartItem->quantity * $cartItem->product->price,
+                'product_name' => $product->name,
+                'product_price' => $product->price,
             ]);
 
             $product = $cartItem->product;
@@ -90,6 +94,7 @@ class CartController extends Controller
         }
 
         Cart::where('user_id', $user->id)->delete();
+        // $user->carts()->delete();
 
         return response()->json(['message' => 'Checkout successful', 'order' => $order], 201);
     }

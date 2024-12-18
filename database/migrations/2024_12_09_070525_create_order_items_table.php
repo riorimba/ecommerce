@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('price');
             $table->integer('subtotal');
+            $table->string('product_name');
+            $table->integer('product_price');
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
