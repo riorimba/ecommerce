@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Order;
 
 class OrdersTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class OrdersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('orders')->insert([
+        Order::insert([
             [
                 'user_id' => 1,
                 'status' => 'paid',

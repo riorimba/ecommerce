@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProductImage;
 
 class ProductImagesTableSeeder extends Seeder
 {
@@ -13,7 +14,7 @@ class ProductImagesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('product_images')->insert([
+        ProductImage::insert([
             [
                 'product_id' => 1,
                 'image_path' => 'product1.jpg',
