@@ -6,12 +6,33 @@ use App\Models\Category;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
     public function index(){
-        $products = Product::with('images')->get();
-        return view('products.index', compact('products'));
+        return view('products.index');
+    }
+
+    public function getProducts(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Product::with(['category', 'images'])->select('products.*');
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '<a href="'.route('products.show', $row->id).'" class="show btn btn-success btn-sm">Show</a> ';
+                    $btn .= '<a href="'.route('products.edit', $row->id).'" class="edit btn btn-warning btn-sm">Edit</a>';
+                    $btn .= '<form action="'.route('products.destroy', $row->id).'" method="POST" style="display:inline-block;">';
+                    $btn .= csrf_field();
+                    $btn .= method_field('DELETE');
+                    $btn .= '<button type="submit" class="btn btn-danger btn-sm">Delete</button>';
+                    $btn .= '</form>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
 
     public function create(){

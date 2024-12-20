@@ -13,7 +13,8 @@
         "symfony/css-selector": "^6.0",
         "symfony/event-dispatcher": "^6.0",
         "symfony/string": "^6.0",
-        "symfony/yaml": "^6.0"
+        "symfony/yaml": "^6.0",
+        "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -31,8 +31,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', [AuthenticationController::class, 'logout'])->name('logout');
 
     Route::group(['middleware' => ['role:1']], function () {
+        Route::get('categories/{category}/getProducts', [CategoryController::class, 'getProducts'])->name('categories.getProducts');
+        Route::get('categories/getCategories', [CategoryController::class, 'getCategories'])->name('categories.getCategories');
         Route::resource('categories', CategoryController::class);
+        Route::get('products/getProducts', [ProductController::class, 'getProducts'])->name('products.getProducts');
         Route::resource('products', ProductController::class);
+        Route::get('users/getUsers', [UserController::class, 'getUsers'])->name('users.getUsers');
         Route::resource('users', UserController::class);
         Route::delete('products/images/{image}', [ProductController::class, 'deleteImage'])->name('products.delete_image');
     });

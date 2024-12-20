@@ -22,9 +22,9 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'category_id' => Category::factory(),
+            'category_id' => $this->faker->numberBetween(1, 100),
             'name' => $this->faker->word,
-            'description' => $this->faker->sentence,
+            'description' => $this->faker->word,
             'price' => $this->faker->numberBetween(100, 1000),
             'stock' => $this->faker->numberBetween(1, 100),
             'created_at' => now(),

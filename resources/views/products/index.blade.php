@@ -21,37 +21,32 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach ($products as $product)
-                <tr>
-                    <td>{{ $product->id }}</td>
-                    <td>{{ $product->category ? $product->category->name : 'No Category' }}</td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>
-                    @if($product->images->isNotEmpty())
-                        <img src="{{ asset($product->images->first()->image_path) }}" alt="Product Image" style="max-width: 100px;">
-                    @endif
-                    </td>
-                    <td>
-                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-success btn-sm">Show</a>
-                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
     </table>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#products-table').DataTable();
+        $('#products-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('products.getProducts') }}",
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'category.name', name: 'category.name', defaultContent: 'No Category' },
+                { data: 'name', name: 'name' },
+                { data: 'price', name: 'price' },
+                { data: 'stock', name: 'stock' },
+                { data: 'images', name: 'images', orderable: false, searchable: false, render: function(data, type, row) {
+                    if (data.length > 0) {
+                        return '<img src="' + data[0].image_path + '" alt="Product Image" style="max-width: 100px;">';
+                    } else {
+                        return 'No Image';
+                    }
+                }},
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ],
+            responsive: true,
+        });
     });
 </script>
 @endsection
