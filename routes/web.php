@@ -19,6 +19,8 @@ use App\Http\Controllers\MidtransController;
 */
 
 Route::redirect('/', '/dashboard');
+Route::post('notification/handling', [MidtransController::class, 'notificationHandler'])->name('midtrans.notification');
+
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [AuthenticationController::class, 'register'])->name('register');
@@ -44,4 +46,3 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource('orders', OrderController::class);
 });
-Route::post('midtrans/notification', [MidtransController::class, 'notificationHandler'])->name('midtrans.notification');
