@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MidtransController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,3 +44,4 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource('orders', OrderController::class);
 });
+Route::post('midtrans/notification', [MidtransController::class, 'notificationHandler'])->name('midtrans.notification');

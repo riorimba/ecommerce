@@ -5,8 +5,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class CartController extends Controller
 {
@@ -94,7 +97,42 @@ class CartController extends Controller
         }
 
         Cart::where('user_id', $user->id)->delete();
-        // $user->carts()->delete();
+        
+        // Konfigurasi Midtrans
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
+
+        // Buat transaksi Midtrans
+        $params = [
+            'transaction_details' => [
+                'order_id' => $order->id,
+                'gross_amount' => $order->total,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email' => $user->email,
+            ],
+            'item_details' => $cartItems->map(function ($cartItem) {
+                return [
+                    'id' => $cartItem->product_id,
+                    'price' => $cartItem->product->price,
+                    'quantity' => $cartItem->quantity,
+                    'name' => $cartItem->product->name,
+                ];
+            })->toArray(),
+        ];
+
+        try {
+            $snapResponse = Snap::createTransaction($params);
+            return response()->json([
+                'snap_token' => $snapResponse->token,
+                'redirect_url' => $snapResponse->redirect_url
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
 
         return response()->json(['message' => 'Checkout successful', 'order' => $order], 201);
     }
