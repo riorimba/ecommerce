@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Order;
+use Illuminate\Support\Str;
 
 class OrdersTableSeeder extends Seeder
 {
@@ -15,6 +16,7 @@ class OrdersTableSeeder extends Seeder
     {
         Order::insert([
             [
+                'order_id' => Str::uuid(),
                 'user_id' => 1,
                 'status' => 'paid',
                 'total' => 200,
@@ -22,6 +24,7 @@ class OrdersTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'order_id' => Str::uuid(),
                 'user_id' => 2,
                 'status' => 'shipped',
                 'total' => 1100,
@@ -29,6 +32,7 @@ class OrdersTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'order_id' => Str::uuid(),
                 'user_id' => 2,
                 'status' => 'completed',
                 'total' => 600,

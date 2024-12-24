@@ -82,7 +82,7 @@ class CartController extends Controller
         foreach ($cartItems as $cartItem) {
             $product = $cartItem->product;
             OrderItem::create([
-                'order_id' => $order->id,
+                'order_id' => $order->order_id,
                 'product_id' => $cartItem->product_id,
                 'quantity' => $cartItem->quantity,
                 'price' => $cartItem->product->price,
@@ -107,7 +107,7 @@ class CartController extends Controller
         // Buat transaksi Midtrans
         $params = [
             'transaction_details' => [
-                'order_id' => $order->id,
+                'order_id' => $order->order_id,
                 'gross_amount' => $order->total,
             ],
             'customer_details' => [
