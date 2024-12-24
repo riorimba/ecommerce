@@ -20,6 +20,7 @@ use App\Http\Controllers\MidtransController;
 
 Route::redirect('/', '/dashboard');
 Route::post('notification/handling', [MidtransController::class, 'notificationHandler'])->name('midtrans.notification');
+Route::post('midtrans-callback', [OrderController::class, 'callback']);
 
 
 Route::group(['middleware' => 'guest'], function () {
