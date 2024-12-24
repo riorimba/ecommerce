@@ -46,15 +46,17 @@ class OrderController extends Controller
         $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . config('midtrans.server_key'));
         
         if ($hashed == $request->signature_key) {
-            $order = Order::findOrFail($request->order_id);
-            if($request->transaction_status == 'capture' || $request->transaction_status == 'settlement'){
-            $order->status = 'paid';
-            } elseif($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire'){
-            $order->status = 'cancelled';
-            } elseif($request->transaction_status == 'pending'){
-            $order->status = 'pending';
+            // Perbarui status order berdasarkan status transaksi
+            $order = Order::where('order_id', $request->order_id)->firstOrFail();
+            if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                $order->status = 'paid';
+            } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
+                $order->status = 'cancelled';
+            } elseif ($request->transaction_status == 'pending') {
+                $order->status = 'pending';
             }
             $order->save();
+
             return response()->json(['message' => 'Order status updated successfully.']);
         } else {
             return response()->json(['message' => 'Invalid signature.'], 400);
