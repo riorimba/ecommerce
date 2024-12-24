@@ -23,6 +23,7 @@
                 <th>Product</th>
                 <th>Quantity</th>
                 <th>Price</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                     <td>{{ $item->product_name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ $item->product_price }}</td>
+                    <td>{{ $item->subtotal }}</td>
                 </tr>
             @endforeach
         </tbody>
