@@ -17,6 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
             $table->integer('total');
+            $table->string('payment_type')->nullable();
+            $table->timestamp('transaction_time')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->timestamp('pay_at')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });

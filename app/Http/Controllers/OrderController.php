@@ -48,8 +48,12 @@ class OrderController extends Controller
         if ($hashed == $request->signature_key) {
             // Perbarui status order berdasarkan status transaksi
             $order = Order::where('order_id', $request->order_id)->firstOrFail();
+            $order->payment_type = $request->payment_type;
+            $order->transaction_time = $request->transaction_time;
+            $order->transaction_id = $request->transaction_id;
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 $order->status = 'paid';
+                $order->pay_at = now();
             } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
                 $order->status = 'cancelled';
             } elseif ($request->transaction_status == 'pending') {
