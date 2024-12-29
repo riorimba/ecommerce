@@ -4,7 +4,10 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
         <h1>Users</h1>
-        <a href="{{ route('users.create') }}" class="btn btn-primary">Add User</a>
+        <div>
+            <a href="{{ route('users.export') }}" class="btn btn-success">Export</a>
+            <a href="{{ route('users.create') }}" class="btn btn-primary">Add User</a>
+        </div>
     </div>
     @if($errors->has('password'))
         <div class="alert alert-danger">

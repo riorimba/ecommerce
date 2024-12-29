@@ -43,10 +43,11 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('products/getProducts', [ProductController::class, 'getProducts'])->name('products.getProducts');
         Route::resource('products', ProductController::class);
-        
-        Route::get('users/getUsers', [UserController::class, 'getUsers'])->name('users.getUsers');
-        Route::resource('users', UserController::class);
         Route::delete('products/images/{image}', [ProductController::class, 'deleteImage'])->name('products.delete_image');
+
+        Route::get('users/getUsers', [UserController::class, 'getUsers'])->name('users.getUsers');
+        Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+        Route::resource('users', UserController::class);
     });
     
     Route::resource('orders', OrderController::class);
