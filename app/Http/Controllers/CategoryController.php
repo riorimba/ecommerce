@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
-use App\Models\Product;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CategoriesExport;
+use App\Imports\CategoriesImport;
 
 class CategoryController extends Controller
 {
@@ -77,5 +79,25 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index')
                          ->with('success', 'Category deleted successfully.');
+    }
+
+    public function export(){
+        return Excel::download(new CategoriesExport, 'categories.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        Excel::import(new CategoriesImport, $request->file('file'));
+
+        return redirect()->route('categories.index')->with('success', 'Categories imported successfully.');
+    }
+
+    public function template()
+    {
+        return response()->download(storage_path('app/templates/categories_template.xlsx'));
     }
 }
