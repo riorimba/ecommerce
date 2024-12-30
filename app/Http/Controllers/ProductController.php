@@ -143,6 +143,6 @@ class ProductController extends Controller
 
     public function template()
     {
-        return response()->download(storage_path('app/templates/products_template.xlsx'));
+        return response()->download(public_path('templates/products_template.xlsx'));
     }
 }

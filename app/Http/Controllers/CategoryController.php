@@ -98,6 +98,6 @@ class CategoryController extends Controller
 
     public function template()
     {
-        return response()->download(storage_path('app/templates/categories_template.xlsx'));
+        return response()->download(public_path('templates/categories_template.xlsx'));
     }
 }
