@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('users/getUsers', [UserController::class, 'getUsers'])->name('users.getUsers');
         Route::get('users/export', [UserController::class, 'export'])->name('users.export');
         Route::resource('users', UserController::class);
+
+        Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
     });
     
     Route::resource('orders', OrderController::class);

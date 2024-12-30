@@ -5,6 +5,8 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Midtrans\Config;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrdersExport;
 
 class OrderController extends Controller
 {
@@ -65,5 +67,10 @@ class OrderController extends Controller
         } else {
             return response()->json(['message' => 'Invalid signature.'], 400);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new OrdersExport, 'orders.xlsx');
     }
 }
