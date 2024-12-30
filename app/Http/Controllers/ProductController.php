@@ -7,6 +7,9 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductsExport;
+use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
@@ -120,5 +123,26 @@ class ProductController extends Controller
         $image->delete();
 
         return redirect()->back()->with('success', 'Image deleted successfully.');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        Excel::import(new ProductsImport, $request->file('file'));
+
+        return redirect()->route('products.index')->with('success', 'Products imported successfully.');
+    }
+
+    public function template()
+    {
+        return response()->download(storage_path('app/templates/products_template.xlsx'));
     }
 }

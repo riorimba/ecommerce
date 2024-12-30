@@ -8,7 +8,7 @@
             {{ $product->name }}
         </div>
         <div class="card-body">
-            <h5 class="card-title">Category: {{ $product->category->name }}</h5>
+        <h5 class="card-title">Category: {{ $product->category->name ?? 'No Category' }}</h5>
             <p class="card-text">Description: {{ $product->description }}</p>
             <p class="card-text">Price: ${{ $product->price }}</p>
             <p class="card-text">Stock: {{ $product->stock }}</p>

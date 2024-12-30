@@ -4,7 +4,11 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
         <h1>Products</h1>
-        <a href="{{ route('products.create') }}" class="btn btn-primary">Create Product</a>
+        <div>
+            <a href="{{ route('products.export') }}" class="btn btn-success">Export</a>
+            <button class="btn btn-info" data-toggle="modal" data-target="#importModal">Import</button>
+            <a href="{{ route('products.create') }}" class="btn btn-primary">Create Product</a>
+        </div>
     </div>
     @if(session('success'))
         <div class="alert alert-success mt-2">{{ session('success') }}</div>
@@ -23,6 +27,35 @@
         </thead>
     </table>
 </div>
+
+<!-- Modal for Import -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import Products</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="file">Choose Excel File</label>
+                        <input type="file" name="file" class="form-control" required>
+                    </div>
+                    <a href="{{ route('products.template') }}" class="btn btn-link">Download Template</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
