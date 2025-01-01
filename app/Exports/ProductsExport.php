@@ -3,17 +3,29 @@
 namespace App\Exports;
 
 use App\Models\Product;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class ProductsExport implements FromCollection, WithHeadings
+class ProductsExport implements FromQuery, WithHeadings, WithMapping, WithChunkReading
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    public function query()
     {
-        return Product::select('id', 'name', 'description', 'price', 'stock', 'created_at', 'updated_at')->get();
+        return Product::query();
+    }
+
+    public function map($product): array
+    {
+        return [
+            $product->id,
+            $product->name,
+            $product->description,
+            $product->price,
+            $product->stock,
+            $product->created_at,
+            $product->updated_at,
+        ];
     }
 
     public function headings(): array
@@ -28,4 +40,9 @@ class ProductsExport implements FromCollection, WithHeadings
             'Updated At',
         ];
     }
-}
+
+    public function chunkSize(): int
+    {
+        return 1000;
+    }
+};
