@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewUserNotification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Hash;
+
 
 class AuthenticationController extends Controller
 {
@@ -15,13 +19,23 @@ class AuthenticationController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|confirmed',
         ]);
 
-        $validatedData['role_id'] = 2; //default role for user
+        $validatedData['role_id'] = 2;
 
-        User::create($validatedData);
+        $user = User::withTrashed()->updateOrCreate(
+            ['email' => $validatedData['email']],
+            $validatedData
+        );
+
+        if ($user->trashed()) {
+            $user->restore();
+        }
+
+        $admins = User::where('role_id', 1)->get();
+        Notification::send($admins, new NewUserNotification($user->name, $user->id));
 
         return redirect('login')->with('success', 'User created successfully');
     }

@@ -6,7 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\NotificationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,6 +34,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', [AuthenticationController::class, 'logout'])->name('logout');
 
     Route::group(['middleware' => ['role:1']], function () {
+        Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
         Route::get('categories/{category}/getProducts', [CategoryController::class, 'getProducts'])->name('categories.getProducts');
         Route::get('categories/getCategories', [CategoryController::class, 'getCategories'])->name('categories.getCategories');
         Route::get('categories/export', [CategoryController::class, 'export'])->name('categories.export');

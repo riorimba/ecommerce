@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UsersExport;
+use App\Notifications\NewUserNotification;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -23,14 +25,24 @@ class UserController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|string|min:6|confirmed',
             'role_id' => 'required|exists:roles,id',
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
-        User::create($validatedData);
+        $user = User::withTrashed()->updateOrCreate(
+            ['email' => $validatedData['email']],
+            $validatedData
+        );
+
+        if ($user->trashed()) {
+            $user->restore();
+        }
+
+        $admins = User::where('role_id', 1)->get();
+        Notification::send($admins, new NewUserNotification($user->name, $user->id));
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
