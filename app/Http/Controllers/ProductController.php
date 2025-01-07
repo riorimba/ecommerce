@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductImage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductsExport;
 use App\Imports\ProductsImport;
+use App\Notifications\NewProductNotification;
+use Illuminate\Support\Facades\Notification;
 
 class ProductController extends Controller
 {
@@ -67,6 +70,9 @@ class ProductController extends Controller
                 ]);
             }
         }
+
+        $users = User::where('role_id', 2)->get();
+        Notification::send($users, new NewProductNotification($product->name));
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
