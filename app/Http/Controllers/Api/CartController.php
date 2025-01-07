@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -10,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
 use Midtrans\Snap;
+use App\Notifications\NewOrderNotification;
+use Illuminate\Support\Facades\Notification;
+
 
 class CartController extends Controller
 {
@@ -94,6 +98,9 @@ class CartController extends Controller
             $product = $cartItem->product;
             $product->stock -= $cartItem->quantity;
             $product->save();
+
+            $admins = User::where('role_id', 1)->get();
+            Notification::send($admins, new NewOrderNotification($order->order_id, $order->total));
         }
 
         Cart::where('user_id', $user->id)->delete();
