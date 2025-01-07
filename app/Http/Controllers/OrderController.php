@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Midtrans\Config;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdersExport;
+use App\Notifications\OrderStatusChangedNotification;
+use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
@@ -62,6 +64,9 @@ class OrderController extends Controller
                 $order->status = 'pending';
             }
             $order->save();
+
+            $admins = User::where('role_id', 1)->get();
+            Notification::send($admins, new OrderStatusChangedNotification($order->order_id, $order->status));
 
             return response()->json(['message' => 'Order status updated successfully.']);
         } else {
