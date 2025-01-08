@@ -58,6 +58,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
     });
+
     
+    Route::get('orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
     Route::resource('orders', OrderController::class);
 });

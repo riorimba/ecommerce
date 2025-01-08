@@ -29,7 +29,7 @@
                     <td>{{ $order->total }}</td>
                     <td>{{ $order->status }}</td>
                     <td>
-                        <a href="{{ route('orders.show', $order->id) }}" class="show btn btn btn-success btn-sm">Show</a>
+                        <a href="{{ route('orders.show', $order->order_id) }}" class="show btn btn btn-success btn-sm">Show</a>
                         <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('orders.destroy', $order->id) }}" method="POST" style="display:inline-block;">
                             @csrf
