@@ -100,7 +100,7 @@ class CartController extends Controller
             $product->save();
 
             $admins = User::where('role_id', 1)->get();
-            Notification::send($admins, new NewOrderNotification($order->order_id, $order->total));
+            Notification::send($admins, new NewOrderNotification($order->order_id, $order->id, $order->total));
         }
 
         Cart::where('user_id', $user->id)->delete();
