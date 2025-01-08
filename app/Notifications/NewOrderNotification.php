@@ -37,7 +37,7 @@ class NewOrderNotification extends Notification
     {
         return [
             'message' => 'A new order has been placed. Order ID: ' . $this->order_id . ', Total: $' . $this->total,
-            'url' => url('/orders/' . $this->id),
+            'url' => url('/orders/' . $this->order_id),
         ];
     }
 }
