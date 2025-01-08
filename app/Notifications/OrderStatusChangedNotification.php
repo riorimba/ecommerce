@@ -11,13 +11,15 @@ class OrderStatusChangedNotification extends Notification
 {
     use Queueable;
 
+    protected $id;
     protected $order_id;
     protected $status;
     /**
      * Create a new notification instance.
      */
-    public function __construct($order_id, $status)
+    public function __construct($id, $order_id, $status)
     {
+        $this->id = $id;
         $this->order_id = $order_id;
         $this->status = $status;
     }
