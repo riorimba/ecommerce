@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
 
 class OrderStatusChangedNotification extends Notification
 {
@@ -37,8 +38,9 @@ class OrderStatusChangedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
+            'id' => (string) Str::uuid(),
             'message' => 'Order ID: ' . $this->order_id . ' status has been changed to ' . $this->status,
-            'url' => url('/orders/' . $this->order_id),
+            'url' => url('/orders/' . $this->id),
         ];
     }
 }
