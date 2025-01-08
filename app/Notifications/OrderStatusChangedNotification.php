@@ -11,16 +11,14 @@ class OrderStatusChangedNotification extends Notification
 {
     use Queueable;
 
-    protected $order_id;
-    //protected $id;
+    protected $id;
     protected $status;
     /**
      * Create a new notification instance.
      */
-    public function __construct($order_id, $status)
+    public function __construct($id, $status)
     {
-        $this->order_id = $order_id;
-        //$this->id = $id;
+        $this->id = $id;
         $this->status = $status;
     }
 
@@ -37,8 +35,8 @@ class OrderStatusChangedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'Order ID: ' . $this->order_id . ' status has been changed to ' . $this->status,
-            'url' => url('/orders/' . $this->order_id),
+            'message' => 'Order ID: ' . $this->id . ' status has been changed to ' . $this->status,
+            'url' => url('/orders/' . $this->id),
         ];
     }
 }

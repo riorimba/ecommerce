@@ -17,9 +17,8 @@ class OrderController extends Controller
         return view('orders.index', compact('orders'));
     }
 
-    public function show($order_id)
-    {
-        $order = Order::where('order_id', $order_id)->with('user', 'orderItems.product')->firstOrFail();
+    public function show(Order $order){
+        $order->load('user', 'orderItems.product');
         return view('orders.show', compact('order'));
     }
 
@@ -67,7 +66,7 @@ class OrderController extends Controller
             $order->save();
 
             $users = User::all();
-            Notification::send($users, new OrderStatusChangedNotification($order->order_id, $order->status));
+            Notification::send($users, new OrderStatusChangedNotification($order->id, $order->status));
 
             return response()->json(['message' => 'Order status updated successfully.']);
         } else {
