@@ -66,7 +66,7 @@ class OrderController extends Controller
             $order->save();
 
             $users = User::all();
-            Notification::send($users, new OrderStatusChangedNotification($order->id, $order->order_id, $order->status));
+            Notification::send($users, new OrderStatusChangedNotification($order->order_id, $order->status));
 
             return response()->json(['message' => 'Order status updated successfully.']);
         } else {
