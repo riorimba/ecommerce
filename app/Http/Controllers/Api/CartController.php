@@ -44,22 +44,22 @@ class CartController extends Controller
         return response()->json(['message' => 'Product not found in cart'], 404);
     }
 
-    public function countProducts(){
+    public function countProducts(Request $request)
+    {
         $userId = Auth::id();
-        $cartItems = Cart::with('product')->where('user_id', $userId)->get();
-        $count = $cartItems->count();
+        $cartItems = Cart::with('product')->where('user_id', $userId)->paginate(10); 
 
         return response()->json([
-            'count' => $count,
-            'products' => $cartItems->map(function ($cartItem) {
-                return [
-                    'product_id' => $cartItem->product_id,
-                    'name' => $cartItem->product->name,
-                    'quantity' => $cartItem->quantity,
-                    'price' => $cartItem->product->price,
-                    'total' => $cartItem->quantity * $cartItem->product->price,
-                ];
-            })
+            'count' => $cartItems->total(),
+            'products' => $cartItems->items(),
+            'pagination' => [
+                'current_page' => $cartItems->currentPage(),
+                'last_page' => $cartItems->lastPage(),
+                'per_page' => $cartItems->perPage(),
+                'total' => $cartItems->total(),
+                'next_page_url' => $cartItems->nextPageUrl(),
+                'prev_page_url' => $cartItems->previousPageUrl(),
+            ],
         ]);
     }
 

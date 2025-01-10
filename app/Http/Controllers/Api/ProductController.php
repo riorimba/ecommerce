@@ -18,7 +18,7 @@ class ProductController extends Controller
             $query->orderBy('price', $request->sort_by_price);
         }
 
-        $products = $query->get();
+        $products = $query->paginate(10);
 
         return response()->json($products);
     }

@@ -10,12 +10,12 @@ class NewUserNotification extends Notification
     use Queueable;
 
     public $name;
-    public $id;
+    public $userId;
 
-    public function __construct($name, $id)
+    public function __construct($name, $userId)
     {
         $this->name = $name;
-        $this->id = $id;
+        $this->userId = $userId;
     }
 
     public function via($notifiable)
@@ -27,7 +27,7 @@ class NewUserNotification extends Notification
     {
         return [
             'message' => 'A new user has registered: ' . $this->name,
-            'url' => url('/users/'. $this->id),
+            'url' => url('/users/'. $this->userId),
         ];
     }
 }
