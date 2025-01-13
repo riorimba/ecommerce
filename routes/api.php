@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\NotificationController;
 
+use App\Http\Controllers\OrderController as OrderControllerWeb;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +38,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('orders/{orderId}', [OrderController::class, 'show']);
+    Route::get('orders/{id}/invoice', [OrderControllerWeb::class, 'downloadInvoice']);
+
+
 
     // Rute untuk notifikasi
     Route::get('notifications', [NotificationController::class, 'index']);

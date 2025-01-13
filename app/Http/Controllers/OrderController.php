@@ -9,6 +9,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdersExport;
 use App\Notifications\OrderStatusChangedNotification;
 use Illuminate\Support\Facades\Notification;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -77,5 +79,13 @@ class OrderController extends Controller
     public function export()
     {
         return Excel::download(new OrdersExport, 'orders.xlsx');
+    }
+
+    public function downloadInvoice($id)
+    {
+        $order = Order::with('user', 'orderItems.product')->findOrFail($id);
+        $pdf = PDF::loadView('invoice', compact('order'));
+
+        return $pdf->download('invoice.pdf');
     }
 }
