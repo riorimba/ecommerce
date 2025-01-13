@@ -8,10 +8,10 @@
             Order #{{ $order->id }}
         </div>
         <div class="card-body">
-            <p><strong>Transaction Time:</strong> {{ $order->transaction_time }}</p>
-            <p><strong>Transaction ID:</strong> {{ $order->transaction_id }}</p>
-            <p><strong>Payment Type:</strong> {{ $order->payment_type }}</p>
-            <p><strong>Pay At:</strong> {{ $order->pay_at }}</p>
+            <p><strong>Transaction Time:</strong> {{ $order->transaction_time ?? 'Not Paid Yet' }}</p>
+            <p><strong>Transaction ID:</strong> {{ $order->transaction_id ?? 'Not Paid Yet' }}</p>
+            <p><strong>Payment Type:</strong> {{ $order->payment_type ?? 'Not Paid Yet' }}</p>
+            <p><strong>Pay At:</strong> {{ $order->pay_at ?? 'Not Paid Yet' }}</p>
             <p><strong>Total: </strong> {{ $order->total }}</p>
             <p><strong>Status: </strong> {{ $order->status }}</p>
         </div>

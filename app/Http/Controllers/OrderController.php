@@ -11,6 +11,8 @@ use App\Notifications\OrderStatusChangedNotification;
 use Illuminate\Support\Facades\Notification;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+
 
 class OrderController extends Controller
 {
@@ -84,6 +86,9 @@ class OrderController extends Controller
     public function downloadInvoice($id)
     {
         $order = Order::with('user', 'orderItems.product')->findOrFail($id);
+        if (Auth::id() !== $order->user_id && Auth::user()->role_id !== 1) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $pdf = PDF::loadView('invoice', compact('order'));
 
         return $pdf->download('invoice.pdf');

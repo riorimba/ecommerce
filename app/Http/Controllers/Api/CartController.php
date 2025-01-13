@@ -108,7 +108,7 @@ class CartController extends Controller
         Cart::where('user_id', $user->id)->delete();
 
         
-        Mail::to($user->email)->send(new InvoiceMail($order));
+        // Mail::to($user->email)->send(new InvoiceMail($order));
         
         // Konfigurasi Midtrans
         Config::$serverKey = config('midtrans.server_key');

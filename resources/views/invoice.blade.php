@@ -9,8 +9,10 @@
     <p><strong>Email:</strong> {{ $order->user->email }}</p>
     <p><strong>Order ID:</strong> {{ $order->order_id }}</p>
     <p><strong>Date:</strong> {{ $order->created_at->format('d-m-Y') }}</p>
-    <p><strong>Payment Type:</strong> {{ $order->payment_type }}</p>
-    <p><strong>Paid At:</strong> {{ $order->pay_at ? $order->pay_at->format('d-m-Y H:i:s') : 'Not Paid Yet' }}</p>
+    <p><strong>Payment Type:</strong> {{ $order->payment_type ?? 'Not Paid Yet' }}</p>
+    <p><strong>Pay At:</strong> {{ $order->pay_at ?? 'Not Paid Yet' }}</p>
+    <p><strong>Status:</strong> {{ $order->status }}</p>
+
 
     <h2>Items</h2>
     <table width="100%" border="1" cellspacing="0" cellpadding="5">

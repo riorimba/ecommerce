@@ -57,8 +57,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('users', UserController::class);
 
         Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
+        Route::get('orders/{id}/invoice', [OrderController::class, 'downloadInvoice'])->name('orders.downloadInvoice');
+        Route::resource('orders', OrderController::class);
     });
-
-    Route::get('orders/{id}/invoice', [OrderController::class, 'downloadInvoice'])->name('orders.downloadInvoice');
-    Route::resource('orders', OrderController::class);
+    
 });
