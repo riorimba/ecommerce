@@ -7,7 +7,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
-use App\Mail\InvoiceMail;
+use App\Mail\OrderConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
@@ -107,8 +107,7 @@ class CartController extends Controller
 
         Cart::where('user_id', $user->id)->delete();
 
-        
-        // Mail::to($user->email)->send(new InvoiceMail($order));
+        Mail::to($user->email)->send(new OrderConfirmationMail($order));
         
         // Konfigurasi Midtrans
         Config::$serverKey = config('midtrans.server_key');

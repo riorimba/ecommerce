@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Notification;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\InvoiceMail;
 
 
 class OrderController extends Controller
@@ -62,6 +63,7 @@ class OrderController extends Controller
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 $order->status = 'paid';
                 $order->pay_at = now();
+                Mail::to($order->user->email)->send(new InvoiceMail($order));
             } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
                 $order->status = 'cancelled';
             } elseif ($request->transaction_status == 'pending') {

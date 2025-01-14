@@ -11,9 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
-
-class InvoiceMail extends Mailable
+class OrderConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,7 +31,7 @@ class InvoiceMail extends Mailable
     // public function envelope(): Envelope
     // {
     //     return new Envelope(
-    //         subject: 'Invoice Mail',
+    //         subject: 'Order Confirmation Mail',
     //     );
     // }
 
@@ -57,8 +55,8 @@ class InvoiceMail extends Mailable
         // Generate PDF
         $pdf = PDF::loadView('invoice', ['order' => $this->order]);
 
-        return $this->view('emails.invoice')
-                    ->subject('Invoice for Your Order')
+        return $this->view('emails.order-confirmation')
+                    ->subject('Order Confirmation for Your Order')
                     ->attachData($pdf->output(), 'invoice.pdf', [
                         'mime' => 'application/pdf',
                     ]);
