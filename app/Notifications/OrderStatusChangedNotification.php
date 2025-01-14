@@ -38,7 +38,7 @@ class OrderStatusChangedNotification extends Notification
     {
         return [
             'message' => 'Order ID: ' . $this->order_id . ' status has been changed to ' . $this->status,
-            'url' => url('/notifications/' . $this->orderId),
+            'url' => url('/orders/' . $this->orderId),
         ];
     }
 }
