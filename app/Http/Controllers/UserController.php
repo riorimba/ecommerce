@@ -10,6 +10,7 @@ use App\Exports\UsersExport;
 use App\Notifications\NewUserNotification;
 use Illuminate\Support\Facades\Notification;
 
+
 class UserController extends Controller
 {
     public function index(){
@@ -40,6 +41,8 @@ class UserController extends Controller
         if ($user->trashed()) {
             $user->restore();
         }
+
+        $user->sendEmailVerificationNotification();
 
         $admins = User::where('role_id', 1)->get();
         Notification::send($admins, new NewUserNotification($user->name, $user->id));
@@ -89,6 +92,39 @@ class UserController extends Controller
 
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function profile(){
+        $user = auth()->user();
+        return view('profile.edit', compact('user'));
+    }
+
+    public function updateProfile(Request $request){
+        $user = auth()->user();
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        if (!empty($validatedData['password'])) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        } else {
+            unset($validatedData['password']);
+        }
+
+        $newEmail = $validatedData['email'];
+        $emailChanged = $newEmail !== $user->email;
+
+        if ($emailChanged) {
+            $user->email_verified_at = null; 
+            $user->email = $newEmail;
+            $user->sendEmailVerificationNotification();
+        }
+
+        $user->update($validatedData);
+
+        return redirect()->route('users.index')->with('success', 'Profile updated successfully.');
     }
 
     public function export()

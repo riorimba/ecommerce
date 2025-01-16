@@ -34,10 +34,12 @@ class AuthenticationController extends Controller
             $user->restore();
         }
 
+        $user->sendEmailVerificationNotification();
+
         $admins = User::where('role_id', 1)->get();
         Notification::send($admins, new NewUserNotification($user->name, $user->id));
 
-        return redirect('login')->with('success', 'User created successfully');
+        return redirect('login')->with('success', 'User created successfully. Please check your email to verify your account.');
     }
 
     public function login(){
@@ -52,9 +54,19 @@ class AuthenticationController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'email' => 'Your provided credentials do not match in our records.',
+            'email' => 'Your provided credentials do not match in our records.',
             ])->onlyInput('email');
         }
+
+        $user = Auth::user();
+        if (!$user->hasVerifiedEmail()) {
+            Auth::logout();
+            return back()->withErrors([
+            'email' => 'You need to verify your email address before logging in.',
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
 
         return to_route('dashboard')
             ->withSuccess('You have successfully logged in!');

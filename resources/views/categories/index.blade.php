@@ -55,6 +55,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+        setTimeout(function() {
+            $('.alert-success').fadeOut('slow');
+            $('.alert-danger').fadeOut('slow');
+        }, 3000);
+
         var table = $('#categories-table').DataTable({
             processing: true,
             serverSide: true,

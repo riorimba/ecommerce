@@ -78,6 +78,11 @@
 <script>
     $(document).ready(function() {
         $('#users-table').DataTable();
+
+        setTimeout(function() {
+            $('.alert-success').fadeOut('slow');
+            $('.alert-danger').fadeOut('slow');
+        }, 3000);
     });
 </script>
 <script>
