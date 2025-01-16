@@ -73,6 +73,35 @@ class UserController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:250'],
+            'email' => ['required', 'email', 'max:250', 'unique:users,email,' . $user->id],
+            'password' => ['nullable', 'min:6', 'confirmed'],
+        ]);
+
+        $user->name = $request->name;
+
+        if ($user->email !== $request->email) {
+            $user->email = $request->email;
+            $user->email_verified_at = null;
+            $user->sendEmailVerificationNotification();
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile updated successfully! Please verify your new email address.',
+            'user' => $user,
+        ]);
+    }
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();

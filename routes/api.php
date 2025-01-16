@@ -24,11 +24,13 @@ use App\Http\Controllers\OrderController as OrderControllerWeb;
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
-Route::get('me', [UserController::class, 'me'])->middleware('auth:sanctum');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('me', [UserController::class, 'me']);
+    Route::post('update-profile', [UserController::class, 'updateProfile']);
+    
     Route::get('products', [ProductController::class, 'index']);
 
     Route::post('cart/add', [CartController::class, 'addProduct']);
