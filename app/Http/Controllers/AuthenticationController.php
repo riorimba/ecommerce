@@ -32,14 +32,19 @@ class AuthenticationController extends Controller
 
         if ($user->trashed()) {
             $user->restore();
+            $user->email_verified_at = null;
+            $user->save();
         }
+
 
         $user->sendEmailVerificationNotification();
 
         $admins = User::where('role_id', 1)->get();
         Notification::send($admins, new NewUserNotification($user->name, $user->id));
 
-        return redirect('login')->with('success', 'User created successfully. Please check your email to verify your account.');
+        Auth::login($user);
+
+        return redirect()->route('verification.notice')->with('success', 'User created successfully. Please check your email to verify your account.');
     }
 
     public function login(){
@@ -60,10 +65,9 @@ class AuthenticationController extends Controller
 
         $user = Auth::user();
         if (!$user->hasVerifiedEmail()) {
-            Auth::logout();
-            return back()->withErrors([
-            'email' => 'You need to verify your email address before logging in.',
-            ])->onlyInput('email');
+            $user->sendEmailVerificationNotification();
+            //Auth::logout();
+            return redirect()->route('verification.notice')->with('message', 'Please verify your email address.');
         }
 
         $request->session()->regenerate();
