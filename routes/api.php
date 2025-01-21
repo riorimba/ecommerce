@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\AuthenticationController;
 
 use App\Http\Controllers\OrderController as OrderControllerWeb;
 
@@ -22,10 +23,11 @@ use App\Http\Controllers\OrderController as OrderControllerWeb;
 |
 */
 
-Route::post('register', [UserController::class, 'register']);
-Route::post('login', [UserController::class, 'login']);
-Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-
+Route::post('register', [AuthenticationController::class, 'register']);
+Route::post('login', [AuthenticationController::class, 'login']);
+Route::post('logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('forgot-password', [AuthenticationController::class, 'requestVerificationCode']);
+Route::post('update-password', [AuthenticationController::class, 'updatePassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [UserController::class, 'me']);
@@ -41,8 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('orders/{orderId}', [OrderController::class, 'show']);
     Route::get('orders/{id}/invoice', [OrderControllerWeb::class, 'downloadInvoice']);
-
-
 
     // Rute untuk notifikasi
     Route::get('notifications', [NotificationController::class, 'index']);

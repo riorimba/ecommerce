@@ -24,6 +24,7 @@ class AuthenticationController extends Controller
         ]);
 
         $validatedData['role_id'] = 2;
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
         $user = User::withTrashed()->updateOrCreate(
             ['email' => $validatedData['email']],
@@ -35,7 +36,6 @@ class AuthenticationController extends Controller
             $user->email_verified_at = null;
             $user->save();
         }
-
 
         $user->sendEmailVerificationNotification();
 

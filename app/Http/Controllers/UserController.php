@@ -40,6 +40,8 @@ class UserController extends Controller
 
         if ($user->trashed()) {
             $user->restore();
+            $user->email_verified_at = null;
+            $user->save();
         }
 
         $user->sendEmailVerificationNotification();
@@ -124,7 +126,7 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return redirect()->route('users.index')->with('success', 'Profile updated successfully.');
+        return redirect()->route('dashboard')->with('success', 'Profile updated successfully.');
     }
 
     public function export()
